@@ -60,7 +60,8 @@ Cell* Maze::processBackTrack(StackLinked<Cell>* stack)
 
 
       //look at the next cell
-	  top_cell->nextCell();
+	  stack->pop();
+	  top_cell = stack->peek();
 
 
 
@@ -107,18 +108,22 @@ bool Maze::isSolved(Cell* curr_cell, StackLinked<Cell>* stack)
 //backing through the maze, setting the solution color to PATH
 void Maze::processSolution(StackLinked<Cell>* stack)
 {
+cout << __LINE__ << endl;
    //DO THIS
    //the stack has the solution path stored
-   while(         (isSolved((stack->peek()), stack ))    )
+   Cell* curr_cell = stack->peek();
+   isSolved(curr_cell, stack );
+   while(      !(stack->isEmpty())       )
    {
       //get the next cell from the stack
-	  (stack->peek())->nextCell();
-
-
+	  curr_cell = stack->pop();
+	  int row = (curr_cell->getRow());
+	  int col = (curr_cell->getCol());
+cout << __LINE__<<endl;
       
       //update the maze location to PATH
-	  maze->setElement((maze->getNumRows()), (maze->getNumCols()), PATH);
-
+	  maze->setElement(row, col , PATH);
+cout << __LINE__<<endl;
 
 
 
@@ -148,7 +153,7 @@ bool Maze::traverse()
       //call a method in the Cell class to give you a new Cell in a new direction relative to top_cell (initially, DOWN)
       //DO THIS
       Cell* curr_cell = top_cell->nextCell();
-
+cout << __LINE__<<endl;
       //does this new Cell solve the maze?
       done = isSolved(curr_cell, &stack);
       if (done) break;
@@ -168,7 +173,7 @@ bool Maze::traverse()
 		 stack.push(curr_cell);
 
 
-
+cout << __LINE__<<endl;
 
 
 
@@ -180,7 +185,8 @@ bool Maze::traverse()
       {
          //DO THIS
          //delete the cell
-		 delete curr_cell;
+		 stack.pop();
+cout << __LINE__<<endl;
 
       }
    }
@@ -188,13 +194,14 @@ bool Maze::traverse()
    //did we make it to the bottom right?
    if (done)
    {
+cout << __LINE__<<endl;
       processSolution(&stack);
    }
    else
    {
       cout << "No solution." << endl;
    }
-
+   
    return done;
 }
 
